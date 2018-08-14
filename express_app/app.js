@@ -1,28 +1,48 @@
-var express = require('express');
+// adding suggestion for changing favicon module
+// http://jonathanmccormick.me/blog/resolved-error-cannot-find-module-serve-static-in-node-js/
+// modified to use express rather than connect
+var express = require('express'),
+serveStatic = require('serve-static');
 var path = require('path');
-var favicon = require('static-favicon');
+var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+
+// var routes = require('./routes/index');  This is wrong in the book which
+// has this ass var index = require('./routes/index');
+// since the next step deletes the routes directory, we can assume the author
+// meant to say get rid of var routes instead
+
+// var users = require('./routes/users');
 
 var app = express();
+
+// Require file system module
+var fs = require('file-system');
+
+// Include controllers
+fs.readdirSync('controllers').forEach(function (file) {
+    if(file.substr(-3) == '.js') {
+        const route = require('./controllers/' + file)
+        route.controller(app)
+    }
+})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(favicon());
+app.use(serveStatic('public')); // changed rom app.use(favicon())
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+// app.use('/', routes);
+// app.use('/users', users);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

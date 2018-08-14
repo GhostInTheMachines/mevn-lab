@@ -1,5 +1,5 @@
 {
-  "name": "my express test",
+  "name": "my-express-test",
   "description": "just a place to experiment",
   "version": "0.0.1",
   "private": true,
@@ -19,6 +19,7 @@
     "file-system": "^2.2.2",
     "morgan": "~1.9.0",
     "pug": "^2.0.3",
-    "serve-favicon": "^2.5.0"
+    "serve-favicon": "^2.5.0",
+    "serve-static": "^1.13.2"
   }
 }
