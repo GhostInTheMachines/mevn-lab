@@ -37,7 +37,8 @@ app.set('view engine', 'pug');
 app.use(serveStatic('public')); // changed rom app.use(favicon())
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true })); 
+// fixed deprecation warning https://stackoverflow.com/questions/25471856/express-throws-error-as-body-parser-deprecated-undefined-extended
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
