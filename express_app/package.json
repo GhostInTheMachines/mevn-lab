@@ -1,7 +1,13 @@
 {
   "name": "my express test",
+  "description": "just a place to experiment",
   "version": "0.0.1",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:GhostInTheMachines/mevn-lab.git"
+  },
+  "license": "UNLICENSED",
   "scripts": {
     "start": "nodejs ./bin/www"
   },
@@ -10,6 +16,7 @@
     "cookie-parser": "~1.4.3",
     "debug": "~3.1.0",
     "express": "~4.16.3",
+    "file-system": "^2.2.2",
     "morgan": "~1.9.0",
     "pug": "^2.0.3",
     "serve-favicon": "^2.5.0"
