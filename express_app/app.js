@@ -8,6 +8,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
 
 // var routes = require('./routes/index');  This is wrong in the book which
@@ -16,8 +17,16 @@ var bodyParser = require('body-parser');
 // meant to say get rid of var routes instead
 
 // var users = require('./routes/users');
-
 var app = express();
+
+// connect to mongodb
+mongoose.connect('mongodb://localhost:27017)/express_app', function() {
+    console.log('Connection has been made');
+})
+.catch(err => {
+    console.error('App starting error:', err.stack);
+    process.exit(1);
+});
 
 // Require file system module
 var fs = require('file-system');
