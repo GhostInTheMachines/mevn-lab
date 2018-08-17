@@ -1,6 +1,18 @@
+// module.exports.controller = (app) => {
+//     // get users page
+//     app.get('/users', (req, res) => {
+//         res.render('index', { title: 'My Cool Users'});
+//     })
+// }
+
+const User = require("../models/User");
+
 module.exports.controller = (app) => {
-    // get users page
+    // get all users
     app.get('/users', (req, res) => {
-        res.render('users', { title: 'My Cool Users', description: 'This is my awesome description of the users'});
+        User.find({}, 'name email', function (error, users) {
+            if (error) {console.log(error); }
+            res.send(users);
+        })
     })
 }

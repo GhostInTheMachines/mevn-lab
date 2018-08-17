@@ -1,35 +1,40 @@
 // adding suggestion for changing favicon module
 // http://jonathanmccormick.me/blog/resolved-error-cannot-find-module-serve-static-in-node-js/
 // modified to use express rather than connect
-var express = require('express'),
+const express = require('express'),
 serveStatic = require('serve-static');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+// Require file system module
+const fs = require('file-system');
+const mongoose = require('mongoose');
 
 
-// var routes = require('./routes/index');  This is wrong in the book which
-// has this ass var index = require('./routes/index');
-// since the next step deletes the routes directory, we can assume the author
-// meant to say get rid of var routes instead
-
-// var users = require('./routes/users');
-var app = express();
+const app = express();
 
 // connect to mongodb
-mongoose.connect('mongodb://localhost:27017)/express_app', function() {
-    console.log('Connection has been made');
-})
-.catch(err => {
-    console.error('App starting error:', err.stack);
-    process.exit(1);
+mongoose.connect('mongodb://localhost:27017/express_app', { useNewUrlParser: true });
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error"));
+db.once("open", function(callback) {
+    console.log("Connection Succeeded");
 });
 
-// Require file system module
-var fs = require('file-system');
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
+// uncomment first section below after placeing our favicon in /public
+// app.use(serveStatic('public')); // changed from app.use(favicon())
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false })); // changed to false from book example
+// fixed deprecation warning https://stackoverflow.com/questions/25471856/express-throws-error-as-body-parser-deprecated-undefined-extended
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Include controllers
 fs.readdirSync('controllers').forEach(function (file) {
@@ -39,20 +44,6 @@ fs.readdirSync('controllers').forEach(function (file) {
     }
 })
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-app.use(serveStatic('public')); // changed rom app.use(favicon())
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); 
-// fixed deprecation warning https://stackoverflow.com/questions/25471856/express-throws-error-as-body-parser-deprecated-undefined-extended
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use('/', routes);
-// app.use('/users', users);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
